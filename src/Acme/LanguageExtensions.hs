@@ -4,16 +4,16 @@
 
 module Acme.LanguageExtensions where
 
--- | Are BangPatterns enabled?
---
--- >>> :set -XNoBangPatterns
--- >>> let f _ = False in let f !y = y in f True
--- False
---
--- >>> :set -XBangPatterns
--- >>> let f _ = False in let f !y = y in f True
--- True
+import Data.Functor.Identity
+
 bangPatterns :: Bool
 bangPatterns = let f _ = False
                in let f !y = y
                   in f True
+
+rebindableSyntax :: Bool
+rebindableSyntax = runIdentity (do
+    let _ >> _ = pure True
+    Identity ()
+    Identity False
+    )
